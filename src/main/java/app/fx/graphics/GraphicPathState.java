@@ -3,7 +3,7 @@ package app.fx.graphics;
 import javafx.scene.paint.Color;
 
 public enum GraphicPathState {
-	DEFAULT(Color.GRAY, 5.),
+	DEFAULT(Color.GRAY, 2.5),
 	HAS_FOCUS(Color.GRAY, 5.),
 	HAS_FOCUS_MODIFIED(Color.GRAY, 5.);
 	

@@ -16,6 +16,7 @@ public class MainApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 800, 800);
         MainController controller = fxmlLoader.getController();
         stage.setScene(scene);
+        controller.onChangeWorld();
 
         stage.show();
 

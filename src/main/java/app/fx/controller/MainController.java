@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
+import app.Main;
+import app.MainApplication;
 import app.ai.world.WorldAnalyzer;
 import app.fx.graphics.GraphicPath;
 import app.fx.graphics.GraphicPlace;
@@ -34,6 +37,7 @@ import app.fx.handler.MouseEventRight;
 import app.model.map.Path;
 import app.model.map.Place;
 import app.model.map.World;
+import app.model.parser.WorldIO;
 
 public class MainController implements Initializable {
 
@@ -47,15 +51,15 @@ public class MainController implements Initializable {
     public worldParametersController worldParametersController;
     public placeParametersController placeParametersController;
     
-    private Place selectedPlace;
+    public Place selectedPlace;
     private World world;
     private boolean isDijkstraRunning = false;
     private boolean isGeneratingWorld = false;
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
     
     
-    private Map<Place, GraphicPlace> places = new HashMap<Place, GraphicPlace>();
-    private Map<Path, GraphicPath> paths = new HashMap<Path, GraphicPath>();
+    public Map<Place, GraphicPlace> places = new HashMap<Place, GraphicPlace>();
+    public Map<Path, GraphicPath> paths = new HashMap<Path, GraphicPath>();
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -69,12 +73,22 @@ public class MainController implements Initializable {
         	this.contentController.CanvasPane.setScaleX(factor * this.contentController.CanvasPane.getScaleX());
         	this.contentController.CanvasPane.setScaleY(factor * this.contentController.CanvasPane.getScaleY());
         });
+        try {
+			world = WorldIO.loadWorld(MainApplication.class.getResourceAsStream("Monde1.json"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
-        MouseEventLeft mouseEventLeft = new MouseEventLeft(this.contentController.CanvasPane);
+       
+        
+        MouseEventLeft mouseEventLeft = new MouseEventLeft(this);
         MouseEventRight mouseEventRight = new MouseEventRight(this);
         this.contentController.CanvasPane.setOnMousePressed(event -> {
-        	if(event.getButton() == MouseButton.PRIMARY)
+        	
+        	if(event.getButton() == MouseButton.PRIMARY) {
         		mouseEventLeft.mousePressed(event);
+        	}
         	else if(event.getButton() == MouseButton.SECONDARY)
         		mouseEventRight.mousePressed(event);
         });
@@ -141,10 +155,13 @@ public class MainController implements Initializable {
     	Random r = new Random();
     	for(Place place : world.getPlaces()) {
     		places.put(place, new GraphicPlace(place, r.nextDouble(content.getScene().getWidth()), r.nextDouble(content.getScene().getHeight())));
+    		contentController.CanvasPane.getChildren().add(places.get(place));
     	}
     	for(Path path : world.getPaths()) {
     		paths.put(path, new GraphicPath(path, places.get(path.getFirstPlace()), places.get(path.getSecondPlace())));
+    		contentController.CanvasPane.getChildren().add(paths.get(path));
     	}
+    	
     }
 
 	public Map<Place, GraphicPlace> getPlaces() {

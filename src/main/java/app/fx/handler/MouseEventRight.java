@@ -7,16 +7,20 @@ import app.fx.graphics.GraphicPath;
 import app.fx.graphics.GraphicPlace;
 import app.model.map.Path;
 import app.model.map.Place;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class MouseEventRight implements CenterMouseEvent {
 	private GraphicPlace orgin;
 	private MainController controller;
-	private Line line = new Line();
-	
+	private Line line;
 	public MouseEventRight(MainController controller) {
 		this.controller = controller;
+		
+		
 	}
 
 	@Override
@@ -25,6 +29,10 @@ public class MouseEventRight implements CenterMouseEvent {
 			if(gp.contains(event.getX(), event.getY())) {
 				orgin = gp;
 				line = new Line(event.getX(), event.getY(), event.getX(), event.getY());
+
+				line.setFill(Color.BLACK);
+				line.setStrokeWidth(1);
+				controller.contentController.CanvasPane.getChildren().add(line);
 				return;
 			}
 		}
@@ -40,13 +48,19 @@ public class MouseEventRight implements CenterMouseEvent {
 	public void mouseReleased(MouseEvent event) {
 		for(GraphicPlace gp : controller.getPlaces().values()) {
 			if(gp.contains(event.getX(), event.getY())) {
-				Path path = new Path(orgin.getPlace(), gp.getPlace(),1);
-				controller.getWorld().addPath(path);
-				controller.getPaths().put(path, new GraphicPath(path, orgin, gp));
-				controller.onChangeWorld();
-				return;
+				if (orgin != gp) {
+					Path path = new Path(orgin.getPlace(), gp.getPlace(),1);
+					controller.getWorld().addPath(path);
+					GraphicPath ln = new GraphicPath(path, orgin, gp);
+					controller.getPaths().put(path, ln);
+					controller.contentController.CanvasPane.getChildren().add(ln);
+					break;
+				}
+				
 			}
 		}
+		controller.contentController.CanvasPane.getChildren().remove(line);
+		line = null;
 
 	}
 
