@@ -1,14 +1,15 @@
 package app.fx.controller;
 
+import app.ai.world.WorldGenerator;
+import app.model.map.World;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 public class worldParametersController implements Initializable {
     public TextField nameWorld;
@@ -128,5 +129,41 @@ public class worldParametersController implements Initializable {
         labelMonstre.setText(sliderMonstre.getValue() + "% (" + (Integer.parseInt(nbPlace.getText())*(sliderMonstre.getValue()/100) + ")"));
     }
 
+    public void gererGenerationIA() {
+        if (sliderDebut.getValue() + sliderVictoire.getValue() + sliderDefaite.getValue() < 100
+                && Integer.parseInt(nbPlace.getText()) > 2) {
+            iaGeneratorCheck.setDisable(false);
+        } else {
+            iaGeneratorCheck.setDisable(true);
+        }
+    }
 
+    public void generation() {
+        ProgressBar progressBar = new ProgressBar(0);
+        CompletableFuture<World> worldGenerator = CompletableFuture.supplyAsync(() -> {
+
+            return WorldGenerator.builder()
+                    .name(nameWorld.getText())
+                    .nbPlace(Integer.parseInt(nbPlace.getText()))
+                    .percentageStartPoint(sliderDebut.getValue())
+                    .percentageDefeatPoint(sliderDefaite.getValue())
+                    .percentageMonster(sliderMonstre.getValue())
+                    .withAIGeneration(iaGeneratorCheck.isSelected())
+                    .build()
+                    .generate( (place) -> {
+                        if (iaGeneratorCheck.isSelected()) {
+                            progressBar.setProgress(progressBar.getProgress() + 1);
+
+                        }
+                    } );
+        });
+        worldGenerator.thenAccept(world -> {
+
+        });
+        worldGenerator.exceptionally(ex -> {
+            // Gérer l'exception ici, par exemple en affichant un message d'erreur
+            System.err.println("Erreur lors de la génération du monde : " + ex.getMessage());
+            return null;
+        });
+    }
 }
