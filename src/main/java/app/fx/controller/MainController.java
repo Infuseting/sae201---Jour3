@@ -89,7 +89,6 @@ public class MainController implements Initializable {
     private SimpleBooleanProperty isDijkstraRunning = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isGeneratingWorld = new SimpleBooleanProperty(false);
 
-    public Place selectedPlace;
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
 
 
@@ -243,6 +242,7 @@ public class MainController implements Initializable {
 	}
 
     public void onChangeWorld() {
+        contentController.setSelectedPlace(null);
     	contentController.CanvasPane.getChildren().clear();
     	places.clear();
     	paths.clear();
