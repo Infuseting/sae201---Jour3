@@ -1,4 +1,4 @@
-package app.view.event;
+package app.fx.handler;
 
 import app.model.map.Place;
 
