@@ -1,8 +1,10 @@
 {
-	"world": "Sylvarant",
+	"world": "Undefined",
 	"places": [
-	{
-      "id": 1,
+],
+	"paths": [
+	]
+}1,
       "name": "Iselia village",
       "description": "",
       "start": false,

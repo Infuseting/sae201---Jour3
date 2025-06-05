@@ -1,5 +1,7 @@
 package app.fx.controller;
 
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.*;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
@@ -13,6 +15,9 @@ public class ContentController implements Initializable {
 
     public MainController controller;
 
+    public SimpleBooleanProperty isModifiedProperty = new SimpleBooleanProperty(false);
+    public SimpleStringProperty currentFileProperty = new SimpleStringProperty("Undefined");
+
     public void setMainController(MainController controller) {
         this.controller = controller;
     }
@@ -20,5 +25,9 @@ public class ContentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    public StringExpression currentFile() {
+        return currentFileProperty;
     }
 }
