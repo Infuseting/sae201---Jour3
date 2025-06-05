@@ -25,6 +25,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -84,24 +85,17 @@ public class MainController implements Initializable {
     public worldParametersController worldParametersController;
     public placeParametersController placeParametersController;
 
-    public World world = new World("Undefined");;
+    public World world ;
     private SimpleBooleanProperty isDijkstraRunning = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isGeneratingWorld = new SimpleBooleanProperty(false);
 
     public Place selectedPlace;
-    private World world;
-    private boolean isDijkstraRunning = false;
-    private boolean isGeneratingWorld = false;
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
 
 
     private Map<Place, GraphicPlace> places = new HashMap<Place, GraphicPlace>();
     private Map<Path, GraphicPath> paths = new HashMap<Path, GraphicPath>();
 
-
-
-    public Map<Place, GraphicPlace> places = new HashMap<Place, GraphicPlace>();
-    public Map<Path, GraphicPath> paths = new HashMap<Path, GraphicPath>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -122,8 +116,6 @@ public class MainController implements Initializable {
             this.contentController.CanvasPane.setScaleX(factor * this.contentController.CanvasPane.getScaleX());
             this.contentController.CanvasPane.setScaleY(factor * this.contentController.CanvasPane.getScaleY());
         });
-
-        MouseEventLeft mouseEventLeft = new MouseEventLeft(this.contentController.CanvasPane);
         try {
 			world = WorldIO.loadWorld(MainApplication.class.getResourceAsStream("Monde1.json"));
 		} catch (IOException e) {

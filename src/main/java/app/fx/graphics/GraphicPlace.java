@@ -18,6 +18,10 @@ public class GraphicPlace extends Circle{
 		this.strokeWidthProperty().bind(Bindings.when(pressedProperty())
 				.then(5.)
 				.otherwise(state.get().getStroke()));
+		this.strokeProperty().bind(Bindings.when(pressedProperty())
+				.then(state.get().getColor())
+				.otherwise(Bindings.createObjectBinding(() -> state.get().getColor(), state)));
+
 		this.place = place;
 		this.label.layoutXProperty().bind(this.centerXProperty());
 		this.label.layoutYProperty().bind(this.centerYProperty());
