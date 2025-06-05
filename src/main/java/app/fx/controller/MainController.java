@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -58,7 +59,6 @@ public class MainController implements Initializable {
         this.contentController.setMainController(this);
         this.worldParametersController.setMainController(this);
         this.placeParametersController.setMainController(this);
-
     }
     
     public void launchDijkstra() {
@@ -101,5 +101,18 @@ public class MainController implements Initializable {
 			timeline.play();
     	});
     	
+    }
+    
+    public void onChangeWorld() {
+    	contentController.CanvasPane.getChildren().clear();
+    	places.clear();
+    	paths.clear();
+    	Random r = new Random();
+    	for(Place place : world.getPlaces()) {
+    		places.put(place, new GraphicPlace(place, r.nextDouble(content.getScene().getWidth()), r.nextDouble(content.getScene().getHeight())));
+    	}
+    	for(Path path : world.getPaths()) {
+    		paths.put(path, new GraphicPath(path, places.get(path.getFirstPlace()), places.get(path.getSecondPlace())));
+    	}
     }
 }

@@ -10,16 +10,12 @@ import javafx.scene.shape.Line;
 public class GraphicPath extends Line {
 	private Path path;
 	private Label label;
-	private GraphicPlace firstPlace;
-	private GraphicPlace secondPlace;
 	private SimpleObjectProperty<GraphicPathState> state = new SimpleObjectProperty<GraphicPathState>(GraphicPathState.DEFAULT);
 	
-	public GraphicPath(Path path) {
+	public GraphicPath(Path path, GraphicPlace firstPlace, GraphicPlace secondPlace) {
 		this.fillProperty().bind(Bindings.createObjectBinding(()->state.get().getColor(), state));
 		this.strokeWidthProperty().bind(Bindings.when(pressedProperty()).then(new SimpleDoubleProperty(10.)).otherwise(Bindings.createDoubleBinding(()->state.get().getStroke(), state)));
 		this.path = path;
-		this.firstPlace = new GraphicPlace(path.getFirstPlace());
-		this.secondPlace = new GraphicPlace(path.getSecondPlace());
 		this.startXProperty().bind(firstPlace.centerXProperty());
 		this.startYProperty().bind(firstPlace.centerYProperty());
 		this.endXProperty().bind(secondPlace.centerXProperty());

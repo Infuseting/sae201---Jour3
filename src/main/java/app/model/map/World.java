@@ -10,6 +10,7 @@ public class World {
     private final Set<Path> paths;
 
     private final HashMap<Place, HashMap<Place, Integer>> pathCache;
+    
 
     public World(String name) {
         this.name = name;
