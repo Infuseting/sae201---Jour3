@@ -107,6 +107,10 @@ public class placeParametersController implements Initializable, DijkstraEventLi
     }
 
     public void loadNewPlace() {
+
+
+
+
         startBtn.selectedProperty().bindBidirectional(controller.contentController.selectedPlace.get().isStartProperty());
         endBtn.selectedProperty().bindBidirectional(controller.contentController.selectedPlace.get().isEndProperty());
         defeatBtn.selectedProperty().bindBidirectional(controller.contentController.selectedPlace.get().isDefeatProperty());
@@ -250,4 +254,30 @@ public class placeParametersController implements Initializable, DijkstraEventLi
     }
 
 
+    public void unloadPlace(Place place) {
+        startBtn.selectedProperty().unbindBidirectional(controller.contentController.selectedPlace.get().isStartProperty());
+        endBtn.selectedProperty().unbindBidirectional(controller.contentController.selectedPlace.get().isEndProperty());
+        defeatBtn.selectedProperty().unbindBidirectional(controller.contentController.selectedPlace.get().isDefeatProperty());
+        isMonsterCheck.selectedProperty().unbind();
+        nameArea.textProperty().unbindBidirectional(controller.contentController.selectedPlace.get().nameProperty());
+        descArea.textProperty().unbindBidirectional(controller.contentController.selectedPlace.get().descriptionProperty());
+        nameMonsterField.textProperty().unbind();
+        armorMonsterField.textProperty().unbind();
+        hpMonsterField.textProperty().unbind();
+        attackMonsterField.textProperty().unbind();
+        idArea.setText("");
+        startBtn.setSelected(false);
+        endBtn.setSelected(false);
+        defeatBtn.setSelected(false);
+        isMonsterCheck.setSelected(false);
+        nameArea.setText("");
+
+        descArea.setText("");
+        nameMonsterField.setText("");
+        armorMonsterField.setText("");
+        hpMonsterField.setText("");
+        attackMonsterField.setText("");
+        dijkstraData.clear();
+        updateTableColumns();
+    }
 }

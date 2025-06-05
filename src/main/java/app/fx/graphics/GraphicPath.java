@@ -20,7 +20,8 @@ public class GraphicPath extends Line {
 		this.startYProperty().bind(firstPlace.centerYProperty());
 		this.endXProperty().bind(secondPlace.centerXProperty());
 		this.endYProperty().bind(secondPlace.centerYProperty());
-		this.label = new Label(path.getLength() + "");
+		this.label = new Label();
+		this.label.textProperty().setValue(path.getLength() + "");
 		System.out.println(this.label);
 		this.label.layoutXProperty().bind(Bindings.divide(Bindings.subtract(this.endXProperty(), this.startXProperty()), 2));
 		this.label.layoutYProperty().bind(Bindings.divide(Bindings.subtract(this.endYProperty(), this.startYProperty()), 2));

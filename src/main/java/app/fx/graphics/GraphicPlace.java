@@ -12,11 +12,14 @@ import java.awt.*;
 
 public class GraphicPlace extends Circle{
 	private Place place;
-	private Label label = new Label();
+	public Label labelIn = new Label();
+	public Label labelOut = new Label();
 	private SimpleObjectProperty<GraphicPlaceState> state = new SimpleObjectProperty<GraphicPlaceState>(GraphicPlaceState.DEFAULT);
 	private MainController controller;
 	public GraphicPlace(MainController controller, Place place, double x, double y) {
 		super(x, y, 15);
+
+		
 		this.controller = controller;
 		state.bind(Bindings.createObjectBinding(() -> {
 			if (place.isStartProperty().get()) {
@@ -42,11 +45,13 @@ public class GraphicPlace extends Circle{
 				).then(5.).otherwise(state.get().getStroke())
 		);
 		this.strokeProperty().bind(Bindings.createObjectBinding(() -> javafx.scene.paint.Color.BLACK, state));
-
 		this.place = place;
-		this.label.layoutXProperty().bind(this.centerXProperty());
-		this.label.layoutYProperty().bind(this.centerYProperty());
-		this.label.textProperty().bind(Bindings.when(state.get().isDijkstra()).then(String.format("id : %d", place.getId())).otherwise(String.format("distance : %d",1)));
+		this.labelOut.layoutXProperty().bind(centerXProperty().subtract(labelOut.widthProperty().divide(2)));
+		this.labelOut.layoutYProperty().bind(centerYProperty().subtract(labelOut.heightProperty().divide(2)).add(30));
+		this.labelIn.layoutXProperty().bind(centerXProperty().subtract(labelIn.widthProperty().divide(2)));
+		this.labelIn.layoutYProperty().bind(centerYProperty().subtract(labelIn.heightProperty().divide(2)));
+		this.labelIn.textProperty().bind(Bindings.when(state.get().isDijkstra()).then(String.format("%d", place.getId())).otherwise(String.format(" %d",1)));
+		this.labelOut.textProperty().bind(place.nameProperty());
 	}
 	
 	public Place getPlace() {

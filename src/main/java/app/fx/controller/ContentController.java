@@ -60,6 +60,10 @@ public class ContentController implements Initializable {
     }
 
     public void setSelectedPlace(Place place) {
+        if (selectedPlace.get() != null) {
+            controller.placeParametersController.unloadPlace(selectedPlace.get());
+        }
+
         selectedPlace.set(place);
         if (place != null) {
             controller.placeParametersController.updatePlaceParameters();

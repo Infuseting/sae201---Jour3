@@ -176,7 +176,10 @@ public class worldParametersController implements Initializable {
         });
 
         worldGenerator.thenAccept(world -> {
-            javafx.application.Platform.runLater(() -> progressBar.setProgress(1.0));
+            javafx.application.Platform.runLater(() -> {progressBar.setProgress(1.0); controller.world = world;
+                controller.onChangeWorld(); });
+
+
         }).exceptionally(ex -> {
             System.err.println("Erreur lors de la génération du monde : " + ex.getMessage());
             return null;

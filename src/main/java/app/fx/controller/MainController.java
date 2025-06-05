@@ -236,20 +236,23 @@ public class MainController implements Initializable {
     	places.clear();
     	paths.clear();
     	Random r = new Random();
-    	for(Place place : world.getPlaces()) {
-
-
-            GraphicPlace graphicplace =new GraphicPlace(this, place, r.nextDouble(content.getScene().getWidth()), r.nextDouble(content.getScene().getHeight()));
+        for (Place place : world.getPlaces()) {
+            GraphicPlace graphicplace = new GraphicPlace(this, place, r.nextDouble(content.getScene().getWidth()), r.nextDouble(content.getScene().getHeight()));
             places.put(place, graphicplace);
+        }
 
+        for (Path path : world.getPaths()) {
+            GraphicPath graphicPath = new GraphicPath(path, places.get(path.getFirstPlace()), places.get(path.getSecondPlace()));
+            paths.put(path, graphicPath);
+            contentController.CanvasPane.getChildren().add(graphicPath);
+            contentController.CanvasPane.getChildren().add(graphicPath.getLabel());
+        }
+
+        for (Place place : world.getPlaces()) {
             contentController.CanvasPane.getChildren().add(places.get(place));
-    	}
-    	for(Path path : world.getPaths()) {
-
-    		paths.put(path, new GraphicPath(path, places.get(path.getFirstPlace()), places.get(path.getSecondPlace())));
-    		contentController.CanvasPane.getChildren().add(paths.get(path));
-            contentController.CanvasPane.getChildren().add(paths.get(path).getLabel());
-    	}
+            contentController.CanvasPane.getChildren().add(places.get(place).labelIn);
+            contentController.CanvasPane.getChildren().add(places.get(place).labelOut);
+        }
 
     }
 
