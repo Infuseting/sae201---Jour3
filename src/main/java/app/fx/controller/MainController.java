@@ -3,6 +3,7 @@ package app.fx.controller;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
@@ -41,7 +42,7 @@ public class MainController implements Initializable {
     private World world;
     private boolean isDijkstraRunning = false;
     private boolean isGeneratingWorld = false;
-    private ObservableList<DijkstraEventListener> dijkstraList;
+    private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
     
     
     @Override
@@ -55,6 +56,7 @@ public class MainController implements Initializable {
     
     public void launchDijkstra() {
     	if (selectedPlace == null) return;
+    	isDijkstraRunning = true;
     	
     	CompletableFuture<List<Pair<Place, HashMap<Place, Integer>>>> thread = CompletableFuture.supplyAsync(() -> {
         	WorldAnalyzer worldAnalyzer = new WorldAnalyzer(world);
@@ -70,22 +72,25 @@ public class MainController implements Initializable {
 				Place currentPlace = pair.getKey();
 				
 				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeLineFrom(currentPlace))));
-				currentTime.add(duration);
+				currentTime = currentTime.add(duration);
 				
 				HashMap<Place, Integer> map = pair.getValue();
 				for (Place to : map.keySet()) {
 					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeNewDistance(currentPlace, to))));
-					currentTime.add(duration);
+					currentTime = currentTime.add(duration);
 					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.newDistance(currentPlace, to, map.get(to)))));
-					currentTime.add(duration);
+					currentTime = currentTime.add(duration);
 					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.afterNewDistance(currentPlace, to))));
-					currentTime.add(duration);
+					currentTime = currentTime.add(duration);
 				}
 				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.afterLineFrom(currentPlace))));
-				currentTime.add(duration);
+				currentTime = currentTime.add(duration);
     		}
-			timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.tearDown())));
-			currentTime.add(duration);
+			timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> {
+				dijkstraList.forEach(elem -> elem.tearDown());
+				isDijkstraRunning = false;
+			}));
+			currentTime = currentTime.add(duration);
 			timeline.play();
     	});
     	
