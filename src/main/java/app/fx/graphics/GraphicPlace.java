@@ -9,7 +9,7 @@ import javafx.scene.shape.Circle;
 
 public class GraphicPlace extends Circle{
 	private Place place;
-	private Label label;
+	private Label label = new Label();
 	private SimpleObjectProperty<GraphicPlaceState> state = new SimpleObjectProperty<GraphicPlaceState>(GraphicPlaceState.DEFAULT);
 
 	public GraphicPlace(Place place, double x, double y) {

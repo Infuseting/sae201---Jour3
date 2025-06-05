@@ -4,3 +4,5 @@ Liste a faire:
 - couleurs des traits des paths,
 - selections continue des places (comme dans la vidéo),
 - verification que tout fonctionne (dijkstra, ....)
+- faire des binds entre les menus avec le moins de bind possible.
+- 
