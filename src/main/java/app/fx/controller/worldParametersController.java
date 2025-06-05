@@ -193,6 +193,7 @@ public class worldParametersController implements Initializable {
 
         }).exceptionally(ex -> {
             System.err.println("Erreur lors de la génération du monde : " + ex.getMessage());
+            generationInProgress.set(false); progressBar.setVisible(false);
             return null;
         });
 
