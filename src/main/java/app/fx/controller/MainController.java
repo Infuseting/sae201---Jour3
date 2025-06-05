@@ -184,28 +184,35 @@ public class MainController implements Initializable {
 
 
     public boolean onSauvegarde() {
+        menuController.loadBtn.setDisable(true);
+        menuController.saveBtn.setDisable(true);
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load World from Json");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files", "*.json"));
-        File file = fileChooser.showOpenDialog(contentController.Canvas.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(contentController.CanvasPane.getScene().getWindow());
         if (file != null) {
             try {
                 world = WorldIO.loadWorld((InputStream) new FileInputStream(file));
                 contentController.isModifiedProperty.set(false);
                 contentController.currentFileProperty.set(file.getAbsolutePath());
-
+                menuController.loadBtn.setDisable(false);
+                menuController.saveBtn.setDisable(false);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        menuController.loadBtn.setDisable(false);
+        menuController.saveBtn.setDisable(false);
         return false;
     }
     public boolean onChargement() {
+        menuController.loadBtn.setDisable(true);
+        menuController.saveBtn.setDisable(true);
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load Json World");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files", "*.json"));
-        File file = fileChooser.showOpenDialog(contentController.Canvas.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(contentController.CanvasPane.getScene().getWindow());
         if (file != null) {
             try {
                 InputStream inputStream = new FileInputStream(file);
@@ -213,11 +220,15 @@ public class MainController implements Initializable {
                 contentController.isModifiedProperty.set(false);
                 contentController.currentFileProperty.set(file.getAbsolutePath());
                 onChangeWorld();
+                menuController.loadBtn.setDisable(false);
+                menuController.saveBtn.setDisable(false);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        menuController.loadBtn.setDisable(false);
+        menuController.saveBtn.setDisable(false);
         return false;
     }
 

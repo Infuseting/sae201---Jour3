@@ -1,6 +1,7 @@
 package app.fx.controller;
 
 import app.model.parser.WorldIO;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
@@ -32,8 +33,21 @@ public class MenuController implements Initializable {
     }
 
     private void closeBtn() {
-        closeBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            event.consume();
+        closeBtn.setOnAction(event -> {
+            if (controller.contentController.isModifiedProperty.get()) {
+                if (!controller.onQuitter(controller)) {
+                    System.out.println("Fermeture annulée, sauvegarde non effectuée.");
+                    event.consume();
+                }
+                else {
+
+                    Platform.exit();
+                }
+            }
+            else {
+
+                Platform.exit();
+            }
         });
     }
 

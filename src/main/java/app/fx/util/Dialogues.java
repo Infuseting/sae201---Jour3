@@ -18,7 +18,6 @@ public class Dialogues {
         ButtonType boutonSauvegarderQuitter = new ButtonType("Sauvegarder et quitter", ButtonType.OK.getButtonData());
 
         alert.getButtonTypes().setAll(boutonAnnuler, boutonQuitter, boutonSauvegarderQuitter);
-
         Optional<ButtonType> result = alert.showAndWait();
         if (result.orElse(boutonAnnuler) == boutonSauvegarderQuitter) {
             return controller.onSauvegarde();
