@@ -4,6 +4,7 @@ module sae2025 {
     requires javafx.controls;
     requires java.net.http;
     requires java.desktop;
+	requires javafx.base;
 
     opens app.model.map;
 
