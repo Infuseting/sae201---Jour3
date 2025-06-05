@@ -11,14 +11,21 @@ import javafx.collections.ObservableList;
 import app.model.map.Place;
 import app.model.map.World;
 import app.model.parser.WorldIO;
+import app.fx.util.Dialogues;
+import app.model.map.World;
+import app.model.parser.WorldIO;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -92,6 +99,49 @@ public class MainController implements Initializable {
 				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeLineFrom(currentPlace))));
 				currentTime = currentTime.add(duration);
 
+    }
+
+    public boolean onSauvegarde() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load World from Json");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files", "*.json"));
+        File file = fileChooser.showOpenDialog(contentController.Canvas.getScene().getWindow());
+        if (file != null) {
+            try {
+                world = WorldIO.loadWorld((InputStream) new FileInputStream(file));
+                contentController.isModifiedProperty.set(false);
+                contentController.currentFileProperty.set(file.getAbsolutePath());
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    public boolean onChargement() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Json World");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files", "*.json"));
+        File file = fileChooser.showOpenDialog(contentController.Canvas.getScene().getWindow());
+        if (file != null) {
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                world = WorldIO.loadWorld(inputStream);
+                contentController.isModifiedProperty.set(false);
+                contentController.currentFileProperty.set(file.getAbsolutePath());
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean onQuitter(MainController controller) {
+        if (Dialogues.confirmation(controller)) {
+            return true;
+        }
+        return false;
 				HashMap<Place, Integer> map = pair.getValue();
 				for (Place to : map.keySet()) {
 					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeNewDistance(currentPlace, to))));

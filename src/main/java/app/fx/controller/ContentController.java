@@ -1,5 +1,7 @@
 package app.fx.controller;
 
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.*;
 import app.model.map.Place;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
@@ -17,6 +19,9 @@ public class ContentController implements Initializable {
 
     public MainController controller;
 
+    public SimpleBooleanProperty isModifiedProperty = new SimpleBooleanProperty(false);
+    public SimpleStringProperty currentFileProperty = new SimpleStringProperty("Undefined");
+
     public SimpleObjectProperty<Place> selectedPlace = new SimpleObjectProperty<>(null);
     public void setMainController(MainController controller) {
         this.controller = controller;
@@ -25,6 +30,10 @@ public class ContentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    public StringExpression currentFile() {
+        return currentFileProperty;
     }
 
     public void setSelectedPlace(Place place) {
