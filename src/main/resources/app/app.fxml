@@ -31,9 +31,9 @@
       <fx:include source="content.fxml" fx:id="content"/>
    </center>
    <right>
-      <fx:include source="placeParameters.fxml" fx:id="placeParameters"/>
+      <fx:include source="placeParameters.fxml" fx:id="placeParameters" prefHeight="600.0"/>
    </right>
    <left>
-      <fx:include source="worldParameters.fxml" fx:id="worldParameters"/>
+      <fx:include source="worldParameters.fxml" fx:id="worldParameters" prefHeight="600.0"/>
    </left>
 </BorderPane>

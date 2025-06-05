@@ -3,6 +3,7 @@ package app.fx.controller;
 import app.ai.world.WorldGenerator;
 import app.model.map.World;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
@@ -32,6 +33,8 @@ public class worldParametersController implements Initializable {
     public ProgressBar progressBar;
     public MainController controller;
 
+    public SimpleBooleanProperty generationInProgress = new SimpleBooleanProperty(false);
+
     public void setMainController(MainController controller) {
         this.controller = controller;
     }
@@ -47,6 +50,15 @@ public class worldParametersController implements Initializable {
         sliderAutre.setDisable(true);
 
         // Ajout des listeners
+        generateBtn.disableProperty().bind(
+                Bindings.createBooleanBinding(() -> {
+                    double somme = sliderDebut.getValue() + sliderVictoire.getValue() + sliderDefaite.getValue();
+                    int nb = 1;
+                    try { nb = Integer.parseInt(nbPlace.getText()); } catch (Exception ignored) {}
+                    return somme > 100 || nb < 2 || generationInProgress.get();
+                }, sliderDebut.valueProperty(), sliderVictoire.valueProperty(), sliderDefaite.valueProperty(), nbPlace.textProperty(), generationInProgress)
+        );
+
         sliderDebut.valueProperty().addListener((obs, oldVal, newVal) -> { updateSliders(); updateAllSliders();});
         sliderVictoire.valueProperty().addListener((obs, oldVal, newVal) -> { updateSliders(); updateAllSliders();});
         sliderDefaite.valueProperty().addListener((obs, oldVal, newVal) -> { updateSliders(); updateAllSliders();});
@@ -113,11 +125,6 @@ public class worldParametersController implements Initializable {
         gererSliderCouverture();
         gererSliderMonstre();
         gererGenerationIA();
-        boolean activable = sliderDebut.getValue() + sliderVictoire.getValue() + sliderDefaite.getValue() <= 100;
-        int nb = 1;
-        try { nb = Integer.parseInt(nbPlace.getText()); } catch (Exception ignored) {}
-        activable = activable && nb >= 2;
-        generateBtn.setDisable(!activable);
     }
 
     public void gererSliderCouverture() {
@@ -152,8 +159,10 @@ public class worldParametersController implements Initializable {
 
     public void generation() {
         if (generateBtn.isDisabled()) return;
+        generationInProgress.set(true);
         int nbPlaces = Integer.parseInt(nbPlace.getText());
         boolean withIA = iaGeneratorCheck.isSelected();
+        System.out.println("Génération du monde avec " + nbPlaces + " places, IA: " + withIA);
         progressBar.setVisible(withIA);
         progressBar.setProgress(0);
         CompletableFuture<World> worldGenerator = CompletableFuture.supplyAsync(() -> {
@@ -163,6 +172,7 @@ public class worldParametersController implements Initializable {
                     .percentageStartPoint(sliderDebut.getValue() / 100.0)
                     .percentageDefeatPoint(sliderDefaite.getValue() / 100.0)
                     .percentageMonster(sliderMonstre.getValue() / 100.0)
+                    .maximumPathPerPlace((sliderCouverture.getValue() / 100.0))
                     .withAIGeneration(withIA)
                     .build()
                     .generate(place -> {
@@ -178,13 +188,13 @@ public class worldParametersController implements Initializable {
 
         worldGenerator.thenAccept(world -> {
             javafx.application.Platform.runLater(() -> {progressBar.setProgress(1.0); controller.world = world;
-                controller.onChangeWorld(); });
+                controller.onChangeWorld(); generationInProgress.set(false); progressBar.setVisible(false);});
 
 
         }).exceptionally(ex -> {
             System.err.println("Erreur lors de la génération du monde : " + ex.getMessage());
             return null;
         });
-        progressBar.setVisible(false);
+
     }
 }

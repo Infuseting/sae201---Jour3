@@ -47,23 +47,27 @@ public class MouseEventRight implements CenterMouseEvent {
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		for(GraphicPlace gp : controller.getPlaces().values()) {
-			if(gp.contains(event.getX(), event.getY())) {
+		for (GraphicPlace gp : controller.getPlaces().values()) {
+			if (gp.contains(event.getX(), event.getY())) {
 				if (orgin != gp) {
-					Path path = new Path(orgin.getPlace(), gp.getPlace(),1);
-					controller.getWorld().addPath(path);
-					GraphicPath ln = new GraphicPath(path, orgin, gp);
-					controller.getPaths().put(path, ln);
-					controller.contentController.CanvasPane.getChildren().add(ln);
-					controller.contentController.CanvasPane.getChildren().add(ln.getLabel());
+					boolean existe = controller.getWorld().getPaths().stream().anyMatch(
+							p -> (p.getFirstPlace().equals(orgin.getPlace()) && p.getSecondPlace().equals(gp.getPlace()))
+									|| (p.getFirstPlace().equals(gp.getPlace()) && p.getSecondPlace().equals(orgin.getPlace()))
+					);
+					if (!existe) {
+						Path path = new Path(orgin.getPlace(), gp.getPlace(), 1);
+						controller.getWorld().addPath(path);
+						GraphicPath ln = new GraphicPath(path, orgin, gp);
+						controller.getPaths().put(path, ln);
+						controller.contentController.CanvasPane.getChildren().add(0, ln);
+						controller.contentController.CanvasPane.getChildren().add(0, ln.getLabel());
+					}
 					break;
 				}
-				
 			}
 		}
 		controller.contentController.CanvasPane.getChildren().remove(line);
 		line = null;
-
 	}
 
 }

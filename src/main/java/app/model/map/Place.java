@@ -24,7 +24,7 @@ public class Place {
 
     public Place(int id, String name, Monster monster, String description, World world, boolean isStart, boolean isEnd, boolean isDefeat) {
         this.id = id;
-        this.name = new SimpleStringProperty(name);
+        this.name = new SimpleStringProperty(name.replace("\n", ""));
         this.description = new SimpleStringProperty(description);
         this.world = world;
         this.monster = new SimpleObjectProperty<>(monster);
