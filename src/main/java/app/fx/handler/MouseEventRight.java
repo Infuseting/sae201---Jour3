@@ -54,6 +54,7 @@ public class MouseEventRight implements CenterMouseEvent {
 					GraphicPath ln = new GraphicPath(path, orgin, gp);
 					controller.getPaths().put(path, ln);
 					controller.contentController.CanvasPane.getChildren().add(ln);
+					controller.contentController.CanvasPane.getChildren().add(ln.getLabel());
 					break;
 				}
 				

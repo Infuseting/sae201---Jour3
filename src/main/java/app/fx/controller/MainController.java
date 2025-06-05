@@ -251,12 +251,18 @@ public class MainController implements Initializable {
     	paths.clear();
     	Random r = new Random();
     	for(Place place : world.getPlaces()) {
-    		places.put(place, new GraphicPlace(place, r.nextDouble(content.getScene().getWidth()), r.nextDouble(content.getScene().getHeight())));
-    		contentController.CanvasPane.getChildren().add(places.get(place));
+
+
+            GraphicPlace graphicplace =new GraphicPlace(this, place, r.nextDouble(content.getScene().getWidth()), r.nextDouble(content.getScene().getHeight()));
+            places.put(place, graphicplace);
+
+            contentController.CanvasPane.getChildren().add(places.get(place));
     	}
     	for(Path path : world.getPaths()) {
+
     		paths.put(path, new GraphicPath(path, places.get(path.getFirstPlace()), places.get(path.getSecondPlace())));
     		contentController.CanvasPane.getChildren().add(paths.get(path));
+            contentController.CanvasPane.getChildren().add(paths.get(path).getLabel());
     	}
 
     }

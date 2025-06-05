@@ -31,7 +31,8 @@ public class MouseEventLeft implements CenterMouseEvent {
 			if (node instanceof GraphicPlace) {
 				if(node.contains(event.getX(), event.getY())) {
 					place = (GraphicPlace) node;
-					controller.selectedPlace = place.getPlace();
+					controller.contentController.setSelectedPlace(place.getPlace());
+					return;
 				}
 				
 			}

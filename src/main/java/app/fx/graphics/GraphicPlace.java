@@ -1,5 +1,6 @@
 package app.fx.graphics;
 
+import app.fx.controller.MainController;
 import app.model.map.Place;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -13,9 +14,10 @@ public class GraphicPlace extends Circle{
 	private Place place;
 	private Label label = new Label();
 	private SimpleObjectProperty<GraphicPlaceState> state = new SimpleObjectProperty<GraphicPlaceState>(GraphicPlaceState.DEFAULT);
-
-	public GraphicPlace(Place place, double x, double y) {
+	private MainController controller;
+	public GraphicPlace(MainController controller, Place place, double x, double y) {
 		super(x, y, 15);
+		this.controller = controller;
 		state.bind(Bindings.createObjectBinding(() -> {
 			if (place.isStartProperty().get()) {
 				return GraphicPlaceState.IS_START;
@@ -28,9 +30,17 @@ public class GraphicPlace extends Circle{
 			}
 		}, place.isStartProperty(), place.isEndProperty(), place.isDefeatProperty()));
 		this.fillProperty().bind(Bindings.createObjectBinding(()->state.get().getColor(), state));
-		this.strokeWidthProperty().bind(Bindings.when(pressedProperty())
-				.then(5.)
-				.otherwise(state.get().getStroke()));
+		this.strokeWidthProperty().bind(
+				Bindings.when(
+						Bindings.or(
+								pressedProperty(),
+								Bindings.createBooleanBinding(
+										() -> controller.contentController.selectedPlace.get() == place,
+										controller.contentController.selectedPlace
+								)
+						)
+				).then(5.).otherwise(state.get().getStroke())
+		);
 		this.strokeProperty().bind(Bindings.createObjectBinding(() -> javafx.scene.paint.Color.BLACK, state));
 
 		this.place = place;
