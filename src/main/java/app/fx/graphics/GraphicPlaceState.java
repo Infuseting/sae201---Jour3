@@ -6,15 +6,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 
 public enum GraphicPlaceState {
-	DEFAULT(Color.GRAY, 5.),
-	IS_END(Color.GRAY, 5.),
-	IS_START(Color.GRAY, 5.),
-	IS_DEFEAT(Color.GRAY, 5.),
+	DEFAULT(Color.GRAY, 2.5),
+	IS_END(Color.GRAY, 2.5),
+	IS_START(Color.GRAY, 2.5),
+	IS_DEFEAT(Color.GRAY, 2.5),
 	DIJKSTRA_OVER(Color.GRAY, 5.),
-	DIJKSTRA_VISITED(Color.GRAY, 5.),
-	DIJKSTRA_UNVISITED(Color.GRAY, 5.),
+	DIJKSTRA_VISITED(Color.GRAY, 2.5),
+	DIJKSTRA_UNVISITED(Color.GRAY, 2.5),
 	DIJKSTRA_CURRENT(Color.GRAY, 5.),
-	DIJKSTRA_MODIFIED(Color.GRAY, 5.);
+	DIJKSTRA_MODIFIED(Color.GRAY, 2.5);
 	
 	private final Color color;
 	private final Double stroke;

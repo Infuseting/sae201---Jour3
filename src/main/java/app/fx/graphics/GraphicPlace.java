@@ -13,10 +13,11 @@ public class GraphicPlace extends Circle{
 	private SimpleObjectProperty<GraphicPlaceState> state = new SimpleObjectProperty<GraphicPlaceState>(GraphicPlaceState.DEFAULT);
 
 	public GraphicPlace(Place place, double x, double y) {
-		this.setCenterX(x);
-		this.setCenterY(y);
+		super(x, y, 15);
 		this.fillProperty().bind(Bindings.createObjectBinding(()->state.get().getColor(), state));
-		this.strokeWidthProperty().bind(Bindings.when(pressedProperty()).then(new SimpleDoubleProperty(10.)).otherwise(Bindings.createDoubleBinding(()->state.get().getStroke(), state)));
+		this.strokeWidthProperty().bind(Bindings.when(pressedProperty())
+				.then(5.)
+				.otherwise(state.get().getStroke()));
 		this.place = place;
 		this.label.layoutXProperty().bind(this.centerXProperty());
 		this.label.layoutYProperty().bind(this.centerYProperty());
