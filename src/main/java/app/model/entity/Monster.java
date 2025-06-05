@@ -3,6 +3,9 @@ package app.model.entity;
 import app.model.fight.Spell;
 import app.model.parser.JSONObject;
 import app.model.parser.ParserConfig;
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Monster extends Entity {
@@ -43,6 +46,17 @@ public class Monster extends Entity {
         return clone;
     }
 
+    @Override
+    public String toString() {
+        return "Monster{" +
+                "name=" + name.get() +
+                ", currentHP=" + currentHP.get() +
+                ", maximumHP=" + maximumHP.get() +
+                ", armor=" + armor.get() +
+                ", attack=" + attack.get() +
+                '}';
+    }
+
     public Object asJSON() {
         return (" {\n" +
                 "       \"name\": \"%s\",\n" +
@@ -50,5 +64,21 @@ public class Monster extends Entity {
                 "        \"Armor\": %d,\n" +
                 "        \"Attack\": %d\n" +
                 "      }").formatted(name.get(), maximumHP.get(), armor.get(), attack.get());
+    }
+
+    public SimpleStringProperty nomProperty() {
+        return name;
+    }
+    public SimpleIntegerProperty maximumHPProperty() {
+        return maximumHP;
+    }
+    public SimpleIntegerProperty currentHPProperty() {
+        return currentHP;
+    }
+    public SimpleIntegerProperty armorProperty() {
+        return armor;
+    }
+    public SimpleIntegerProperty attackProperty() {
+        return attack;
     }
 }

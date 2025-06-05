@@ -1,5 +1,9 @@
 package app.fx.controller;
 
+import app.model.map.Place;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.*;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
@@ -13,6 +17,7 @@ public class ContentController implements Initializable {
 
     public MainController controller;
 
+    public SimpleObjectProperty<Place> selectedPlace = new SimpleObjectProperty<>(null);
     public void setMainController(MainController controller) {
         this.controller = controller;
     }
@@ -21,4 +26,12 @@ public class ContentController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
+    public void setSelectedPlace(Place place) {
+        selectedPlace.set(place);
+        if (place != null) {
+            controller.placeParametersController.updatePlaceParameters();
+        }
+    }
+
 }
