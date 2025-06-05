@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" prefHeight="379.0" prefWidth="203.0" BorderPane.alignment="CENTER" fx:controller="app.fx.controller.worldParametersController">
+<children>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+        <children>
+            <GridPane GridPane.rowIndex="1">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label text="Nom" />
+                    <TextField fx:id="nameWorld" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="164.0" GridPane.columnIndex="1" />
+                </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="2">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label text="Nb de places" />
+                    <TextField fx:id="nbPlace" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                </children>
+            </GridPane>
+            <GridPane prefHeight="30.0" prefWidth="210.0" GridPane.rowIndex="3">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Slider fx:id="sliderDebut" GridPane.columnIndex="1" />
+                    <Label text="\%debut" />
+                    <Label fx:id="labelDebut" alignment="CENTER_RIGHT" text="9% (1)" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label text="\%victoire" />
+                    <Slider fx:id="sliderVictoire" GridPane.columnIndex="1" />
+                    <Label fx:id="labelVictoire" alignment="CENTER_RIGHT" text="33% (4)" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="5">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label text="\%défaite" />
+                    <Slider fx:id="sliderDefaite" GridPane.columnIndex="1" />
+                    <Label fx:id="labelDefaite" alignment="CENTER_RIGHT" text="6% (1)" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="6">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label text="\%autre" />
+                    <Slider fx:id="sliderAutre" GridPane.columnIndex="1" />
+                    <Label fx:id="labelAutre" alignment="CENTER_RIGHT" text="52% (6)" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="7">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label text="\%couverture" />
+                    <Slider fx:id="sliderCouverture" GridPane.columnIndex="1" />
+                    <Label fx:id="labelCouverture" alignment="CENTER_RIGHT" text="25% (17)" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                </children>
+            </GridPane>
+            <CheckBox fx:id="iaGeneratorCheck" mnemonicParsing="false" text="Avec génération des noms par IA" GridPane.rowIndex="8" />
+            <Label alignment="CENTER" text="Génération d'un monde aléatoire" textAlignment="CENTER" GridPane.halignment="CENTER" />
+        </children>
+    </GridPane>
+    <VBox minHeight="20.0" minWidth="20.0" prefHeight="111.0" prefWidth="203.0">
+        <children>
+            <StackPane alignment="BOTTOM_CENTER" prefHeight="133.0" prefWidth="203.0" VBox.vgrow="NEVER">
+                <children>
+                    <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="169.0" text="Générer un monde aléatoire" textAlignment="CENTER" StackPane.alignment="BOTTOM_CENTER">
+                        <StackPane.margin>
+                            <Insets bottom="5.0" />
+                        </StackPane.margin>
+                    </Button>
+                </children>
+            </StackPane>
+        </children>
+    </VBox>
+</children>
+</VBox>
