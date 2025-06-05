@@ -50,7 +50,15 @@ public class Place {
     }
 
     public String toString() {
-        return String.format("%s\t%s\t%s", name.get(), monster, description.get());
+        return "Place{" +
+                "id=" + id +
+                ", name=" + name.get() +
+                ", description=" + description.get() +
+                ", isEnd=" + isEnd.get() +
+                ", isStart=" + isStart.get() +
+                ", isDefeat=" + isDefeat.get() +
+                ", monster=" + (monster.get())+
+                '}';
     }
 
     public Monster getMonster() {
@@ -72,7 +80,6 @@ public class Place {
     public Map<Place, Integer> getPaths() {
         return world.getPathsFrom(this);
     }
-
     public String asJSON() {
         return ("""
                 {
