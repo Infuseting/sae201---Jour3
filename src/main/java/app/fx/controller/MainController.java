@@ -47,14 +47,12 @@ public class MainController implements Initializable {
     public placeParametersController placeParametersController;
 
     private Place selectedPlace;
-    private World world;
+    private World world = new World("Undefined");;
     private boolean isDijkstraRunning = false;
     private boolean isGeneratingWorld = false;
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
 
 
-
-    public World world = new World("Undefined");
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.menuController.setMainController(this);
