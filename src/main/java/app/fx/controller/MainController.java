@@ -90,12 +90,6 @@ public class MainController implements Initializable {
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
 
 
-
-
-    private Place selectedPlace;
-    private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
-
-
     private Map<Place, GraphicPlace> places = new HashMap<Place, GraphicPlace>();
     private Map<Path, GraphicPath> paths = new HashMap<Path, GraphicPath>();
 
@@ -113,7 +107,6 @@ public class MainController implements Initializable {
         }
 		placeParameters.visibleProperty().bind(contentController.selectedPlace.isNotNull());
 		contentController.setSelectedPlace(world.getPlaces().get(0));
-
         this.contentController.CanvasPane.setOnScroll(event -> {
             double factor = event.getDeltaY() > 0 ? 1.1 : 0.9;
             this.contentController.CanvasPane.setScaleX(factor * this.contentController.CanvasPane.getScaleX());
@@ -140,6 +133,48 @@ public class MainController implements Initializable {
             else if(event.getButton() == MouseButton.SECONDARY)
                 mouseEventRight.mouseReleased(event);
         });
+
+    }
+
+    public void launchDijkstra() {
+    	if (contentController.selectedPlace == null) return;
+    	isDijkstraRunning.set(true);
+		WorldAnalyzer worldAnalyzer = new WorldAnalyzer(world);
+		CompletableFuture<List<Pair<Place, HashMap<Place, Integer>>>> thread = CompletableFuture.supplyAsync(() -> {
+    		return worldAnalyzer.dijkstraWithSteps(contentController.selectedPlace.get());
+    	});
+    	thread.thenAccept(steps -> {
+    		 final Timeline timeline = new Timeline();
+    		 Duration currentTime = Duration.ZERO;
+    		 Duration duration = Duration.millis(250);
+
+    		 for (Pair<Place, HashMap<Place, Integer>> pair : steps) {
+				Place currentPlace = pair.getKey();
+
+				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeLineFrom(currentPlace))));
+				currentTime = currentTime.add(duration);
+				HashMap<Place, Integer> map = pair.getValue();
+				for (Place to : map.keySet()) {
+					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeNewDistance(currentPlace, to))));
+					currentTime = currentTime.add(duration);
+					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.newDistance(currentPlace, to, map.get(to)))));
+					currentTime = currentTime.add(duration);
+					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.afterNewDistance(currentPlace, to))));
+					currentTime = currentTime.add(duration);
+				}
+				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.afterLineFrom(currentPlace))));
+				currentTime = currentTime.add(duration);
+    		}
+			timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> {
+				dijkstraList.forEach(elem -> elem.tearDown());
+				isDijkstraRunning.set(false);
+			}));
+			currentTime = currentTime.add(duration);
+			timeline.play();
+    	}).exceptionally(ex -> {
+			ex.printStackTrace();
+			return null;
+		});
     }
 
 
@@ -153,6 +188,7 @@ public class MainController implements Initializable {
                 world = WorldIO.loadWorld((InputStream) new FileInputStream(file));
                 contentController.isModifiedProperty.set(false);
                 contentController.currentFileProperty.set(file.getAbsolutePath());
+
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -171,6 +207,7 @@ public class MainController implements Initializable {
                 world = WorldIO.loadWorld(inputStream);
                 contentController.isModifiedProperty.set(false);
                 contentController.currentFileProperty.set(file.getAbsolutePath());
+                onChangeWorld();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -184,54 +221,10 @@ public class MainController implements Initializable {
             return true;
         }
         return false;
-
+    }
 	public SimpleBooleanProperty dijkstraRunningProperty() {
 		return isDijkstraRunning;
 	}
-
-
-
-    public void launchDijkstra() {
-    	if (selectedPlace == null) return;
-    	isDijkstraRunning = true;
-
-    	CompletableFuture<List<Pair<Place, HashMap<Place, Integer>>>> thread = CompletableFuture.supplyAsync(() -> {
-        	WorldAnalyzer worldAnalyzer = new WorldAnalyzer(world);
-    		return worldAnalyzer.dijkstraWithSteps(selectedPlace);
-    	});
-
-    	thread.thenAccept(steps -> {
-    		 final Timeline timeline = new Timeline();
-    		 Duration currentTime = Duration.ZERO;
-    		 Duration duration = Duration.millis(250);
-
-    		 for (Pair<Place, HashMap<Place, Integer>> pair : steps) {
-				Place currentPlace = pair.getKey();
-
-				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeLineFrom(currentPlace))));
-				currentTime = currentTime.add(duration);
-
-				HashMap<Place, Integer> map = pair.getValue();
-				for (Place to : map.keySet()) {
-					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.beforeNewDistance(currentPlace, to))));
-					currentTime = currentTime.add(duration);
-					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.newDistance(currentPlace, to, map.get(to)))));
-					currentTime = currentTime.add(duration);
-					timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.afterNewDistance(currentPlace, to))));
-					currentTime = currentTime.add(duration);
-				}
-				timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> dijkstraList.forEach(elem -> elem.afterLineFrom(currentPlace))));
-				currentTime = currentTime.add(duration);
-    		}
-			timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> {
-				dijkstraList.forEach(elem -> elem.tearDown());
-				isDijkstraRunning = false;
-			}));
-			currentTime = currentTime.add(duration);
-			timeline.play();
-    	});
-
-    }
 
     public void onChangeWorld() {
     	contentController.CanvasPane.getChildren().clear();
