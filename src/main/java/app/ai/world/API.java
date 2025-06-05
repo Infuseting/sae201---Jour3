@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class API {
-    private final static String API_KEY = ""; /* TODO Change to your own token */
+    private final static String API_KEY = "AIzaSyAtuKOZr5pBmPEmaBMgpQtPtZEYLWtnwJs"; /* TODO Change to your own token */
 
     public static void main(String[] args) {
         String urlString = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
