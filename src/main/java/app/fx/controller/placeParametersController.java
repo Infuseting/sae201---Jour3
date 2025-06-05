@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 public class placeParametersController implements Initializable, DijkstraEventListener {
     public GridPane right_pane;
-    private ObservableList<HashMap<Place, SimpleIntegerProperty>> dijkstraData = FXCollections.observableArrayList();
+    public ObservableList<HashMap<Place, SimpleIntegerProperty>> dijkstraData = FXCollections.observableArrayList();
 
 
     public TextArea descArea;
@@ -71,17 +71,33 @@ public class placeParametersController implements Initializable, DijkstraEventLi
                 SimpleIntegerProperty prop = cellData.getValue().get(p);
                 int value = prop == null ? Integer.MAX_VALUE : prop.get();
                 if (value == Integer.MAX_VALUE) return new SimpleStringProperty("∞");
-                if (value < 0) {
-                    distanceColumn.setStyle("-fx-text-fill: red;");
-                } else if (value == Integer.MAX_VALUE) {
-                    distanceColumn.setStyle("-fx-text-fill: red;");
-                } else if (value == 0) {
-                    distanceColumn.setStyle("-fx-text-fill: green;");
 
-                } else {
-                    distanceColumn.setStyle("-fx-text-fill: black;");
-                }
                 return new SimpleStringProperty(String.valueOf(value));
+            });
+            distanceColumn.setCellFactory(col -> new TableCell<HashMap<Place, SimpleIntegerProperty>, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(item);
+                    if (empty || item == null) {
+                        setStyle("");
+                    } else if ("∞".equals(item)) {
+                        setStyle("-fx-text-fill: red;");
+                    } else {
+                        try {
+                            int value = Integer.parseInt(item);
+                            if (value < 0) {
+                                setStyle("-fx-text-fill: red;");
+                            } else if (value == 0) {
+                                setStyle("-fx-text-fill: green;");
+                            } else {
+                                setStyle("-fx-text-fill: black;");
+                            }
+                        } catch (NumberFormatException e) {
+                            setStyle("-fx-text-fill: black;");
+                        }
+                    }
+                }
             });
             distanceColumn.setPrefWidth(100);
             djikstraTable.getColumns().add(distanceColumn);
