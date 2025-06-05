@@ -20,6 +20,7 @@ public class MouseEventLeft implements CenterMouseEvent {
 	
 	@Override
 	public void mousePressed(MouseEvent event) {
+		controller.contentController.isModifiedProperty.set(true);
 		originX = event.getX();
 		originY = event.getY();
 		((Node) controller.contentController.CanvasPane).setCursor(Cursor.CLOSED_HAND);

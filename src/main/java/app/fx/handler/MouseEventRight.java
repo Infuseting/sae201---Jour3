@@ -25,6 +25,7 @@ public class MouseEventRight implements CenterMouseEvent {
 
 	@Override
 	public void mousePressed(MouseEvent event) {
+		controller.contentController.isModifiedProperty.set(true);
 		for(GraphicPlace gp : controller.getPlaces().values()) {
 			if(gp.contains(event.getX(), event.getY())) {
 				orgin = gp;

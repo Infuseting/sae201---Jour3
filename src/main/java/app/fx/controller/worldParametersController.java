@@ -168,6 +168,7 @@ public class worldParametersController implements Initializable {
                     .generate(place -> {
                         if (withIA) {
                             javafx.application.Platform.runLater(() -> {
+                                System.out.println(progressBar.getProgress());
                                 double progress = progressBar.getProgress() + 1.0 / nbPlaces;
                                 progressBar.setProgress(Math.min(progress, 1.0));
                             });
