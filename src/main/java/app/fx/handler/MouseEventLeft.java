@@ -25,6 +25,8 @@ public class MouseEventLeft implements CenterMouseEvent {
 		((Node) controller.contentController.CanvasPane).setCursor(Cursor.CLOSED_HAND);
 		
 		ObservableList<Node> child = controller.contentController.CanvasPane.getChildren();
+
+		controller.contentController.setSelectedPlace(null);
 		
 		place = null;
 		for (Node node : child) {

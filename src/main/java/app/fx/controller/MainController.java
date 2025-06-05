@@ -104,26 +104,12 @@ public class MainController implements Initializable {
         this.worldParametersController.setMainController(this);
         this.placeParametersController.setMainController(this);
 		dijkstraList.add(placeParametersController);
-        try {
-            world = WorldIO.loadWorld(Main.class.getResourceAsStream("Monde1.json"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 		placeParameters.visibleProperty().bind(contentController.selectedPlace.isNotNull());
-		contentController.setSelectedPlace(world.getPlaces().get(0));
         this.contentController.CanvasPane.setOnScroll(event -> {
             double factor = event.getDeltaY() > 0 ? 1.1 : 0.9;
             this.contentController.CanvasPane.setScaleX(factor * this.contentController.CanvasPane.getScaleX());
             this.contentController.CanvasPane.setScaleY(factor * this.contentController.CanvasPane.getScaleY());
         });
-        try {
-			world = WorldIO.loadWorld(MainApplication.class.getResourceAsStream("Monde1.json"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
 
         MouseEventLeft mouseEventLeft = new MouseEventLeft(this);
         MouseEventRight mouseEventRight = new MouseEventRight(this);

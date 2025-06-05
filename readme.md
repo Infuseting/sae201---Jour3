@@ -1,5 +1,5 @@
 Liste a faire:
-- affichage distance sur les paths,  
+- affichage distance sur les paths, [x]
 - contour des places ne s'augmente pas, [X]
 - couleurs des traits des paths, [X]
 - selections continue des places (comme dans la vidéo),  [X]
