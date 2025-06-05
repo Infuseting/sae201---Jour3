@@ -16,19 +16,19 @@ public enum GraphicPlaceState {
 	DIJKSTRA_CURRENT(Color.GRAY, 5.),
 	DIJKSTRA_MODIFIED(Color.GRAY, 5.);
 	
-	private SimpleObjectProperty<Color> color;
-	private SimpleDoubleProperty stroke;
+	private final Color color;
+	private final Double stroke;
 	
-	private GraphicPlaceState(Color Color, Double stroke) {
-		this.color.set(Color);
-		this.stroke.set(stroke);
+	private GraphicPlaceState(Color color, Double stroke) {
+		this.color = color;
+		this.stroke = stroke;
 	}
 
-	public SimpleObjectProperty<Color> colorProperty() {
+	public Color getColor() {
 		return color;
 	}
 
-	public SimpleDoubleProperty strokeProperty() {
+	public Double getStroke() {
 		return stroke;
 	}
 	

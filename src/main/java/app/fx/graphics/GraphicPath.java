@@ -2,7 +2,8 @@ package app.fx.graphics;
 
 import app.model.map.Path;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyLongWrapper;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
@@ -11,9 +12,11 @@ public class GraphicPath extends Line {
 	private Label label;
 	private GraphicPlace firstPlace;
 	private GraphicPlace secondPlace;
-	private GraphicPathState state = GraphicPathState.DEFAULT;
+	private SimpleObjectProperty<GraphicPathState> state = new SimpleObjectProperty<GraphicPathState>(GraphicPathState.DEFAULT);
 	
 	public GraphicPath(Path path) {
+		this.fillProperty().bind(Bindings.createObjectBinding(()->state.get().getColor(), state));
+		this.strokeWidthProperty().bind(Bindings.when(pressedProperty()).then(new SimpleDoubleProperty(10.)).otherwise(Bindings.createDoubleBinding(()->state.get().getStroke(), state)));
 		this.path = path;
 		this.firstPlace = new GraphicPlace(path.getFirstPlace());
 		this.secondPlace = new GraphicPlace(path.getSecondPlace());
@@ -26,5 +29,7 @@ public class GraphicPath extends Line {
 		this.label.layoutYProperty().bind(Bindings.divide(Bindings.subtract(this.endYProperty(), this.startYProperty()), 2));
 		this.label.textFillProperty().bind(this.fillProperty());
 		this.label.setPrefWidth(this.getStrokeWidth());
+		this.strokeWidthProperty().bind(Bindings.when(firstPlace.pressedProperty()).then(new SimpleDoubleProperty(10.)).otherwise(new SimpleDoubleProperty(5.)));
+		this.strokeWidthProperty().bind(Bindings.when(secondPlace.pressedProperty()).then(new SimpleDoubleProperty(10.)).otherwise(new SimpleDoubleProperty(5.)));
 	}
 }

@@ -15,6 +15,7 @@ import javafx.util.Pair;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -22,7 +23,10 @@ import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 import app.ai.world.WorldAnalyzer;
+import app.fx.graphics.GraphicPath;
+import app.fx.graphics.GraphicPlace;
 import app.fx.handler.DijkstraEventListener;
+import app.model.map.Path;
 import app.model.map.Place;
 import app.model.map.World;
 
@@ -44,6 +48,9 @@ public class MainController implements Initializable {
     private boolean isGeneratingWorld = false;
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
     
+    
+    private Map<Place, GraphicPlace> places = new HashMap<Place, GraphicPlace>();
+    private Map<Path, GraphicPath> paths = new HashMap<Path, GraphicPath>();
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
