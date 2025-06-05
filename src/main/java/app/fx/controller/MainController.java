@@ -1,8 +1,11 @@
 package app.fx.controller;
 
+import app.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import app.model.map.Place;
@@ -18,6 +21,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -46,11 +50,11 @@ public class MainController implements Initializable {
     public worldParametersController worldParametersController;
     public placeParametersController placeParametersController;
 
-    private Place selectedPlace;
-    private World world = new World("Undefined");;
-    private boolean isDijkstraRunning = false;
-    private boolean isGeneratingWorld = false;
+    public World world = new World("Undefined");;
+    private SimpleBooleanProperty isDijkstraRunning = new SimpleBooleanProperty(false);
+    private SimpleBooleanProperty isGeneratingWorld = new SimpleBooleanProperty(false);
     private ObservableList<DijkstraEventListener> dijkstraList = FXCollections.observableArrayList();
+
 
 
     @Override
@@ -59,21 +63,24 @@ public class MainController implements Initializable {
         this.contentController.setMainController(this);
         this.worldParametersController.setMainController(this);
         this.placeParametersController.setMainController(this);
-
-        contentController.setSelectedPlace(new Place(0, "Le cerveau de Leo", null, "Y a r zebi", world, false, false, false));
-        placeParametersController.loadNewPlace();
+		dijkstraList.add(placeParametersController);
+        try {
+            world = WorldIO.loadWorld(Main.class.getResourceAsStream("Monde1.json"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+		placeParameters.visibleProperty().bind(contentController.selectedPlace.isNotNull());
+		contentController.setSelectedPlace(world.getPlaces().get(0));
 
     }
 
     public void launchDijkstra() {
-    	if (selectedPlace == null) return;
-    	isDijkstraRunning = true;
-
-    	CompletableFuture<List<Pair<Place, HashMap<Place, Integer>>>> thread = CompletableFuture.supplyAsync(() -> {
-        	WorldAnalyzer worldAnalyzer = new WorldAnalyzer(world);
-    		return worldAnalyzer.dijkstraWithSteps(selectedPlace);
+    	if (contentController.selectedPlace == null) return;
+    	isDijkstraRunning.set(true);
+		WorldAnalyzer worldAnalyzer = new WorldAnalyzer(world);
+		CompletableFuture<List<Pair<Place, HashMap<Place, Integer>>>> thread = CompletableFuture.supplyAsync(() -> {
+    		return worldAnalyzer.dijkstraWithSteps(contentController.selectedPlace.get());
     	});
-
     	thread.thenAccept(steps -> {
     		 final Timeline timeline = new Timeline();
     		 Duration currentTime = Duration.ZERO;
@@ -99,11 +106,18 @@ public class MainController implements Initializable {
     		}
 			timeline.getKeyFrames().add(new KeyFrame(currentTime, e -> {
 				dijkstraList.forEach(elem -> elem.tearDown());
-				isDijkstraRunning = false;
+				isDijkstraRunning.set(false);
 			}));
 			currentTime = currentTime.add(duration);
 			timeline.play();
-    	});
+    	}).exceptionally(ex -> {
+			ex.printStackTrace();
+			return null;
+		});
 
     }
+
+	public SimpleBooleanProperty dijkstraRunningProperty() {
+		return isDijkstraRunning;
+	}
 }
