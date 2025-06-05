@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -27,6 +29,8 @@ import app.ai.world.WorldAnalyzer;
 import app.fx.graphics.GraphicPath;
 import app.fx.graphics.GraphicPlace;
 import app.fx.handler.DijkstraEventListener;
+import app.fx.handler.MouseEventLeft;
+import app.fx.handler.MouseEventRight;
 import app.model.map.Path;
 import app.model.map.Place;
 import app.model.map.World;
@@ -59,6 +63,33 @@ public class MainController implements Initializable {
         this.contentController.setMainController(this);
         this.worldParametersController.setMainController(this);
         this.placeParametersController.setMainController(this);
+        
+        this.contentController.CanvasPane.setOnScroll(event -> {
+        	double factor = event.getDeltaY() > 0 ? 1.1 : 0.9;
+        	this.contentController.CanvasPane.setScaleX(factor * this.contentController.CanvasPane.getScaleX());
+        	this.contentController.CanvasPane.setScaleY(factor * this.contentController.CanvasPane.getScaleY());
+        });
+        
+        MouseEventLeft mouseEventLeft = new MouseEventLeft(this.contentController.CanvasPane);
+        MouseEventRight mouseEventRight = new MouseEventRight(this);
+        this.contentController.CanvasPane.setOnMousePressed(event -> {
+        	if(event.getButton() == MouseButton.PRIMARY)
+        		mouseEventLeft.mousePressed(event);
+        	else if(event.getButton() == MouseButton.SECONDARY)
+        		mouseEventRight.mousePressed(event);
+        });
+        this.contentController.CanvasPane.setOnMouseDragged(event -> {
+        	if(event.getButton() == MouseButton.PRIMARY)
+        		mouseEventLeft.mouseDragged(event);
+        	else if(event.getButton() == MouseButton.SECONDARY)
+        		mouseEventRight.mouseDragged(event);
+        });
+        this.contentController.CanvasPane.setOnMouseReleased(event -> {
+        	if(event.getButton() == MouseButton.PRIMARY)
+        		mouseEventLeft.mouseReleased(event);
+        	else if(event.getButton() == MouseButton.SECONDARY)
+        		mouseEventRight.mouseReleased(event);
+        });
     }
     
     public void launchDijkstra() {
@@ -115,4 +146,16 @@ public class MainController implements Initializable {
     		paths.put(path, new GraphicPath(path, places.get(path.getFirstPlace()), places.get(path.getSecondPlace())));
     	}
     }
+
+	public Map<Place, GraphicPlace> getPlaces() {
+		return places;
+	}
+
+	public World getWorld() {
+		return world;
+	}
+
+	public Map<Path, GraphicPath> getPaths() {
+		return paths;
+	}
 }

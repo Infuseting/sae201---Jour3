@@ -22,4 +22,8 @@ public class GraphicPlace extends Circle{
 		this.label.layoutYProperty().bind(this.centerYProperty());
 		this.label.textProperty().bind(Bindings.when(state.get().isDijkstra()).then(String.format("id : %d", place.getId())).otherwise(String.format("distance : %d",1)));
 	}
+	
+	public Place getPlace() {
+		return place;
+	}
 }
